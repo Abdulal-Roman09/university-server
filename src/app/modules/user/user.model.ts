@@ -1,33 +1,33 @@
 import { model, Schema } from "mongoose";
-import { TUser } from "./user.service";
+import { TUser } from "./user.interface";
 
 const userSchema = new Schema<TUser>({
     id: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     needPasswordChange: {
         type: Boolean,
-        required: true
+        default: false,
     },
     role: {
         type: String,
-        enum: ['admin', 'student', 'faculty']
+        enum: ['admin', 'student', 'faculty'],
+        default: 'student'
     },
     status: {
         type: String,
-        enum: ['is-acitive', 'bloced']
+        enum: ['is-active', 'blocked'],
+        default: 'is-active',
     },
     isDeleted: {
         type: Boolean,
-        required: true
-    }
+        default: false,
+    },
+}, { timestamps: true });
 
-},  { timestamps: true })
-
-
-export const User =model<TUser>("User",userSchema)
+export const User = model<TUser>("User", userSchema);
