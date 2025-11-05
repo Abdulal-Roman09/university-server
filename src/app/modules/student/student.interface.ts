@@ -14,10 +14,10 @@ export type TGuardian = {
 };
 
 export type TLocalGuardian = {
-  name: string;
-  occupation: string;
-  contactNo: string;
-  address: string;
+  name?: string;       
+  occupation?: string; 
+  contactNo?: string;  
+  address?: string;   
 };
 
 export type TStudent = {
