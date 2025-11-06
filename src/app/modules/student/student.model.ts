@@ -48,6 +48,14 @@ const studentSchema = new Schema<TStudent, StudentModel>({
 }, {
   timestamps: true,
   versionKey: false,
+  toJSON: {
+    virtuals: true
+  }
+});
+
+// virtual
+studentSchema.virtual('fullName').get(function (this: TStudent) {
+  return `${this.name.firstName} ${this.name.middleName ? this.name.middleName + ' ' : ''}${this.name.lastName}`;
 });
 
 // pre hook midddeller
