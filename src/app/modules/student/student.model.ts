@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { StudentMethods, StudentModel, TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
+import { StudentModel, TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
+
 
 const userNameSchema = new Schema<TUserName>({
   firstName: { type: String, required: true, trim: true },
@@ -23,7 +24,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   address: { type: String },
 }, { _id: false });
 
-const studentSchema = new Schema<TStudent, StudentMethods, StudentModel>({
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, required: true, unique: true },
   name: { type: userNameSchema, required: true },
   gender: { type: String, enum: ['male', 'female'], required: true },
@@ -42,11 +43,20 @@ const studentSchema = new Schema<TStudent, StudentMethods, StudentModel>({
   timestamps: true,
   versionKey: false,
 });
+// creating a custom static method
 
-studentSchema.methods.isUserExists = async function (id: string) {
-  const existingUser = await Student.findOne({ id });
-  return existingUser;
-};
+studentSchema.statics.isUserExists = async function (id) {
+  const existingUser = await Student.findOne({ id })
+  return existingUser
+}
 
 
-export const Student = model<TStudent,StudentModel>('Student', studentSchema);
+// creating a custom intance method
+
+// studentSchema.methods.isUserExists = async function (id: string) {
+//   const existingUser = await Student.findOne({ id });
+//   return existingUser;
+// };
+
+
+export const Student = model<TStudent, StudentModel>('Student', studentSchema);
