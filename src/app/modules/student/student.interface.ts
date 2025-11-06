@@ -38,6 +38,7 @@ export type TStudent = {
   localGuardian?: TLocalGuardian;
   profileImg?: string;
   isActive?: 'active' | 'blocked';
+  isDeleteted:boolean;
 };
 
 //creating instance method

@@ -42,25 +42,33 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   localGuardian: { type: localGuardianSchema, required: false },
   profileImg: { type: String },
   isActive: { type: String, enum: ['active', 'blocked'], default: 'active' },
+  isDeleteted: {
+    type: Boolean,
+    default: false
+  }
+
 }, {
   timestamps: true,
   versionKey: false,
 });
 
 // pre hook midddeller
-studentSchema.pre('save', async function () {
+studentSchema.pre('save', async function (next) {
   //  hash the password and save into db
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
   user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_rounds))
+  next()
 })
 
 
 // pre hook midddeller
-studentSchema.post('save', function () {
-
+studentSchema.post('save', function (doc, next) {
+  // after hashed password hide from user 
+  doc.password = ""
+  next()
 })
 // creating a custom static method
 
