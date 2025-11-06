@@ -42,10 +42,8 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   localGuardian: { type: localGuardianSchema, required: false },
   profileImg: { type: String },
   isActive: { type: String, enum: ['active', 'blocked'], default: 'active' },
-  isDeleteted: {
-    type: Boolean,
-    default: false
-  }
+  isDeleted: { type: Boolean, default: false }
+
 
 }, {
   timestamps: true,
@@ -60,6 +58,13 @@ studentSchema.pre('save', async function (next) {
   user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_rounds))
+  next()
+})
+
+// Quiery Middelweare
+studentSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } })
+
   next()
 })
 
