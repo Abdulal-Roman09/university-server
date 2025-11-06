@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { StudentModel, TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
+import bcrypt from 'bcryptjs';
+import config from '../../config';
 
 
 const userNameSchema = new Schema<TUserName>({
@@ -26,6 +28,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   name: { type: userNameSchema, required: true },
   gender: { type: String, enum: ['male', 'female'], required: true },
   dateOfBirth: { type: String },
@@ -43,6 +46,22 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   timestamps: true,
   versionKey: false,
 });
+
+// pre hook midddeller
+studentSchema.pre('save', async function () {
+  //  hash the password and save into db
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds))
+})
+
+
+// pre hook midddeller
+studentSchema.post('save', function () {
+
+})
 // creating a custom static method
 
 studentSchema.statics.isUserExists = async function (id) {
