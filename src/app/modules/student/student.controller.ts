@@ -1,72 +1,62 @@
-import { NextFunction, Request, Response } from 'express';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/sendResponse';
+import catchAsync from '../../utils/catchAsync';
+import httpStatus from 'http-status';
 
 // Get All Students
-const getAllStudents = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await StudentServices.getAllStudentsFromDB();
+const getAllStudents = catchAsync(async (req, res) => {
 
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'Students retrieved successfully',
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  const result = await StudentServices.getAllStudentsFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Students retrieved successfully',
+    data: result,
+  })
+})
 
 // Get Single Student
-const getSingleStudent = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { studentId } = req.params;
+const getSingleStudent = catchAsync(async (req, res) => {
+  const { studentId } = req.params;
+  const result = await StudentServices.getSingleStudentFromDB(studentId);
 
-    const result = await StudentServices.getSingleStudentFromDB(studentId);
-
-    if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found',
-      });
-    }
-
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'Student retrieved successfully',
-      data: result,
+  if (!result) {
+    return res.status(httpStatus.NOT_FOUND).json({
+      success: false,
+      message: 'Student not found',
     });
-  } catch (error) {
-    next(error);
   }
-};
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Student retrieved successfully',
+    data: result,
+  });
+
+})
 
 // Delete Student
-const deleteStudent = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { studentId } = req.params;
+const deleteStudent = catchAsync(async (req, res) => {
+  const { studentId } = req.params;
+  const result = await StudentServices.deleteStudentFromDB(studentId);
 
-    const result = await StudentServices.deleteStudentFromDB(studentId);
-
-    if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: 'Student not found',
-      });
-    }
-
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'Student deleted successfully',
-      data: result,
+  if (!result) {
+    return res.status(httpStatus.NOT_FOUND).json({
+      success: false,
+      message: 'Student not found',
     });
-  } catch (error) {
-    next(error);
   }
-};
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Student deleted successfully',
+    data: result,
+  });
+
+})
 
 export const StudentControllers = {
   getAllStudents,
