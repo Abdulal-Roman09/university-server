@@ -5,7 +5,7 @@ const userNameSchema = new Schema<TUserName>({
   firstName: { type: String, required: true, trim: true },
   middleName: { type: String, trim: true },
   lastName: { type: String, required: true, trim: true },
-});
+}, { _id: false });
 
 const guardianSchema = new Schema<TGuardian>({
   fatherName: { type: String, required: true },
