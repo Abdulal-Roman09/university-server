@@ -1,21 +1,31 @@
 import { Request, Response } from 'express';
-import { StudentServices } from './user.service';
+import { UserServices } from './user.service';
 
 const createStudent = async (req: Request, res: Response) => {
     try {
         const { password, student: studentData } = req.body;
-        const result = await StudentServices.createStudentIntoDB(studentData);
 
-        res.status(200).json({
+        // const zodParseData = studentValidationSchema.parse(studentData)
+
+        if (!studentData) {
+            return res.status(400).json({
+                success: false,
+                message: 'Student data is required',
+            });
+        }
+
+        const result = await UserServices.createStudentIntoDB(password,studentData);
+
+        res.status(201).json({
             success: true,
-            message: 'Student is created succesfully',
+            message: 'Student created successfully',
             data: result,
         });
-    } catch (err: any) {
+    } catch (error: any) {
         res.status(400).json({
             success: false,
-            message: err?.message || 'Failed to create student',
-            error: err,
+            message: error?.message || 'Failed to create student',
+            error: error,
         });
     }
 };

@@ -1,4 +1,3 @@
-
 export type TUser = {
   id: string;
   password: string;
@@ -7,3 +6,4 @@ export type TUser = {
   status: "is-active" | "blocked";
   isDeleted: boolean;
 };
+
