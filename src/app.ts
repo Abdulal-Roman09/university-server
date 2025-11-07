@@ -1,27 +1,30 @@
-import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-import { StudentRoutes } from './app/modules/student/student.route';
-import { UserRoutes } from './app/modules/user/user.route';
+import cors from 'cors';
+import router from './app/routes';
 import globalErrorHandler from './app/middlwares/globalErrorHandler';
 import notFound from './app/middlwares/notFound';
 
 const app: Application = express();
 
-//parsers
-app.use(express.json());
+// 🔹 Global Middlewares
 app.use(cors());
+app.use(express.json());
 
-// application routes
-app.use('/api/v1', StudentRoutes);
-app.use('/api/v1/users', UserRoutes);
+// 🔹 Application Routes
+app.use('/api/v1', router);
 
-const getAController = (req: Request, res: Response) => {
-  const a = 10;
-  res.send({ value: a });
-};
+// 🔹 Root Route (Health Check)
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    message: 'University server is running successfully 🚀',
+  });
+});
 
-app.get('/', getAController);
-app.use(globalErrorHandler)
-app.use(notFound)
+// 🔹 Global Error Handler
+app.use(globalErrorHandler);
+
+// 🔹 Not Found Handler (Last Middleware)
+app.use(notFound);
 
 export default app;
