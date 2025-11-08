@@ -39,4 +39,4 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
 );
 
 // Exporting the Mongoose model
-export const AcademicSemester = model<IAcademicSemester>('AcademicSemester', academicSemesterSchema);
+export const AcademicSemester = model<TAcademicSemester>('AcademicSemester', academicSemesterSchema);
