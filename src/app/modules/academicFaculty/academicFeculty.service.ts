@@ -13,6 +13,9 @@ const getAllAcademicFecultyFromDb = async () => {
 
 const getSingleAcademicFecultyFromDb = async (id: string) => {
   const result = await AcademicFeculty.findById(id);
+  if (!result) {
+    throw new Error("Feculty is Not Found")
+  }
   return result;
 };
 

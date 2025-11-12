@@ -8,7 +8,7 @@ import {
     Months,
     AcademicSemesterCodes,
     AcademicSemesterNames,
-} from './academicSemester.contance';
+} from './academicSemester.constants';
 
 // Create AcademicSemester Validation Schema
 export const createAcademicSemesterValidationSchema = z.object({

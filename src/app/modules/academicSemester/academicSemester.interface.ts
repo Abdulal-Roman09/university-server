@@ -23,6 +23,6 @@ export type TAcademicSemester = {
 
 }
 
- export  type TAcademiSemesterNameCodeMapper = {
+ export  type TacademicSemesterNameCodeMapper = {
         [key: string]: string
     }

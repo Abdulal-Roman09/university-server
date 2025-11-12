@@ -4,7 +4,7 @@ import httpStatus from 'http-status';
 import { AcademicsemesterServices } from './academicSemester.service';
 
 const createAcademicSemester = catchAsync(async (req, res) => {
-  const result = await AcademicsemesterServices.createAcademicSemeterIntoDB(req.body);
+  const result = await AcademicsemesterServices.createAcademicSemesterIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,

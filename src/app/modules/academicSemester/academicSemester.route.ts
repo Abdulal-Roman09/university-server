@@ -7,27 +7,18 @@ const router = express.Router();
 
 // Create a new academic semester
 router.post(
-  '/create-academic-semester',
-  validationRequest(createAcademicSemesterValidationSchema),
+  '/create-academic-semester', validationRequest(createAcademicSemesterValidationSchema),
   AcademicSemesterControllers.createAcademicSemester
 );
 
 // Get all academic semesters
-router.get(
-  '/',
-  AcademicSemesterControllers.getAllAcademicSemesters
-);
+router.get('/', AcademicSemesterControllers.getAllAcademicSemesters);
 
 // Get a single academic semester by id
-router.get(
-  '/:id',
-  AcademicSemesterControllers.getSingleAcademicSemester
-);
+router.get('/:id', AcademicSemesterControllers.getSingleAcademicSemester);
 
 // Update an academic semester
-router.patch(
-  '/:id',
-  validationRequest(updateAcademicSemesterValidationSchema),
+router.patch('/:id', validationRequest(updateAcademicSemesterValidationSchema),
   AcademicSemesterControllers.updateAcademicSemester
 );
 

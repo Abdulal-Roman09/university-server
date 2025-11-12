@@ -1,12 +1,9 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { TAcademicSemester } from './academicSemester.interface';
-import { AcademicSemesterCodes, AcademicSemesterNames, Months } from './academicSemester.contance';
-
-// Mongoose Document interface extending TypeScript type
-export interface IAcademicSemester extends TAcademicSemester, Document { }
+import { AcademicSemesterCodes, AcademicSemesterNames, Months } from './academicSemester.constants';
 
 // Mongoose Schema
-const academicSemesterSchema = new Schema<IAcademicSemester>(
+const academicSemesterSchema = new Schema<TAcademicSemester>(
     {
         name: {
             type: String,
@@ -38,11 +35,11 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
 
 academicSemesterSchema.pre('save', async function (next) {
 
-    const isSemeterExists = await AcademicSemester.findOne({
+    const isSemesterExists = await AcademicSemester.findOne({
         name: this.name,
         year: this.year
     })
-    if (isSemeterExists) {
+    if (isSemesterExists) {
         throw new Error('Semester is alrady Exists')
     }
     next()

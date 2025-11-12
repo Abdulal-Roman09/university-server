@@ -5,6 +5,7 @@ import httpStatus from 'http-status';
 
 const createAcademicFeculty = catchAsync(async (req, res) => {
     const result = await AcademicFecultyServices.createAcademicFecultyIntoDb(req.body);
+
     res.status(httpStatus.OK).json({
         success: true,
         message: "Academic Faculty created successfully",
