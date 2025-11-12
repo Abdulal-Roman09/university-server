@@ -1,21 +1,23 @@
 import { model, Schema } from "mongoose";
 import { TAcademicFeculty } from "./academicFeculty.interface";
+import httpStatus from 'http-status';
+import AppError from "../../errors/AppError.";
 
-
-const academicFecultSchema = new Schema<TAcademicFeculty>({
+const academicFecultySchema = new Schema<TAcademicFeculty>({
     name: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim: true
     }
-}, { timestamps: true })
+}, { timestamps: true });
 
-academicFecultSchema.pre('save', async function (next) {
-    const isFecultyExist = await AcademicFeculty.findOne({ name: this.name })
+academicFecultySchema.pre('save', async function (next) {
+    const isFecultyExist = await AcademicFeculty.findOne({ name: this.name });
     if (isFecultyExist) {
-        throw new Error("This Academic Feculty is Exist")
+        return next(new AppError(httpStatus.BAD_REQUEST, "This Academic Faculty already exists"));
     }
-    next()
-})
+    next();
+});
 
-export const AcademicFeculty = model<TAcademicFeculty>('AcademicFeculty', academicFecultSchema)
+export const AcademicFeculty = model<TAcademicFeculty>('AcademicFeculty', academicFecultySchema);

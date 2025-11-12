@@ -1,5 +1,7 @@
+import AppError from "../../errors/AppError.";
 import { TAcademicDepartment } from "./academicDepartment.interface";
 import { AcademicDepartment } from "./academicDepartment.model";
+import  httpStatus  from 'http-status';
 
 
 const createAcademicDepartmentIntoDb = async (payload: TAcademicDepartment) => {
@@ -13,11 +15,11 @@ const getAllAcademicDepartmentFromDb = async () => {
 };
 
 const getSingleAcademicDepartmentFromDb = async (id: string) => {
-    const result = await AcademicDepartment.findById(id).populate('academicFeculty')
-    if (!result) {
-        throw new Error("Department is Not Found")
-    }
-    return result;
+  const result = await AcademicDepartment.findById(id).populate('academicFeculty');
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, "Department not found");
+  }
+  return result;
 };
 
 const updateAcademicDepartmentIntoDb = async (

@@ -1,5 +1,7 @@
+import AppError from "../../errors/AppError.";
 import { TAcademicFeculty } from "./academicFeculty.interface";
 import { AcademicFeculty } from "./academicFeculty.model";
+import httpStatus from 'http-status';
 
 const createAcademicFecultyIntoDb = async (payload: TAcademicFeculty) => {
   const result = await AcademicFeculty.create(payload);
@@ -14,7 +16,7 @@ const getAllAcademicFecultyFromDb = async () => {
 const getSingleAcademicFecultyFromDb = async (id: string) => {
   const result = await AcademicFeculty.findById(id);
   if (!result) {
-    throw new Error("Feculty is Not Found")
+    throw new AppError(httpStatus.NOT_FOUND, "Feculty is Not Found")
   }
   return result;
 };
