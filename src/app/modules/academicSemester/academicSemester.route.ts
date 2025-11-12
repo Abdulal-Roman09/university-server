@@ -15,10 +15,10 @@ router.post(
 router.get('/', AcademicSemesterControllers.getAllAcademicSemesters);
 
 // Get a single academic semester by id
-router.get('/:id', AcademicSemesterControllers.getSingleAcademicSemester);
+router.get('/:semesterId', AcademicSemesterControllers.getSingleAcademicSemester);
 
 // Update an academic semester
-router.patch('/:id', validationRequest(updateAcademicSemesterValidationSchema),
+router.patch('/:semesterId', validationRequest(updateAcademicSemesterValidationSchema),
   AcademicSemesterControllers.updateAcademicSemester
 );
 

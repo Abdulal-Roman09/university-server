@@ -16,10 +16,10 @@ router.post(
 router.get('/', AcademicFecultyControllers.getAllAcademicFecultys);
 
 // Get a single academic faculty by id
-router.get('/:id', AcademicFecultyControllers.getSingleAcademicFecculty);
+router.get('/:fecultyId', AcademicFecultyControllers.getSingleAcademicFecculty);
 
 // Update an academic faculty
-router.patch('/:id',
+router.patch('/:fecultyId',
     validationRequest(AcademicFacultyValidation.updateAcademicFecultyValidationSchema),
     AcademicFecultyControllers.updateAcademicFeculty
 );
