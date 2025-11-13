@@ -19,7 +19,7 @@ const getAllStudentsFromDB = async () => {
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.findById(id)
+  const result = await Student.findOne({ id })
     .populate({
       path: 'admissionSemester',
     })
@@ -78,7 +78,7 @@ const deleteStudentFromDB = async (id: string) => {
 
     await session.commitTransaction()
     await session.endSession()
-    
+
     return deleteStudent
 
   } catch (err) {
