@@ -2,18 +2,18 @@ import { Schema, model } from 'mongoose';
 import { StudentModel, TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
 
 const userNameSchema = new Schema<TUserName>({
-  firstName: { type: String, required: true, trim: true },
+  firstName: { type: String, trim: true },
   middleName: { type: String, trim: true },
-  lastName: { type: String, required: true, trim: true },
+  lastName: { type: String, trim: true },
 }, { _id: false });
 
 const guardianSchema = new Schema<TGuardian>({
-  fatherName: { type: String, required: true },
-  fatherOccupation: { type: String, required: true },
-  fatherContactNo: { type: String, required: true },
-  motherName: { type: String, required: true },
-  motherOccupation: { type: String, required: true },
-  motherContactNo: { type: String, required: true },
+  fatherName: { type: String, },
+  fatherOccupation: { type: String, },
+  fatherContactNo: { type: String, },
+  motherName: { type: String, },
+  motherOccupation: { type: String, },
+  motherContactNo: { type: String, },
 }, { _id: false });
 
 const localGuardianSchema = new Schema<TLocalGuardian>({
@@ -24,17 +24,17 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 }, { _id: false });
 
 const studentSchema = new Schema<TStudent, StudentModel>({
-  id: { type: String, required: true, unique: true },
+  id: { type: String, unique: true },
   user: { type: Schema.Types.ObjectId, required: [true, 'user id is required'], unique: true, ref: 'User' },
-  name: { type: userNameSchema, required: true },
-  gender: { type: String, enum: ['male', 'female'], required: true },
+  name: { type: userNameSchema, },
+  gender: { type: String, enum: ['male', 'female'], },
   dateOfBirth: { type: String },
-  email: { type: String, required: true, unique: true },
-  contactNo: { type: String, required: true },
-  emergencyContactNo: { type: String, required: true },
+  email: { type: String, unique: true },
+  contactNo: { type: String, },
+  emergencyContactNo: { type: String, },
   bloodGroup: { type: String, enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] },
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
+  presentAddress: { type: String, },
+  permanentAddress: { type: String, },
   guardian: { type: guardianSchema, required: false },
   localGuardian: { type: localGuardianSchema, required: false },
   profileImg: { type: String },
@@ -42,7 +42,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     type: Schema.Types.ObjectId,
     ref: 'AcademicSemester'
   },
-   academicDepartment: {
+  academicDepartment: {
     type: Schema.Types.ObjectId,
     ref: 'AcademicDepartment'
   },

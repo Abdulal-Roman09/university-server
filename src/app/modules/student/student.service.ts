@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { Student } from "./student.model";
+import { User } from "../user/user.model";
+import { TStudent } from "./student.interface";
 import AppError from "../../errors/AppError.";
 import httpStatus from 'http-status';
-import { User } from "../user/user.model";
 
 const getAllStudentsFromDB = async () => {
   const result = await Student.find()
@@ -32,8 +33,30 @@ const getSingleStudentFromDB = async (id: string) => {
   return result;
 };
 
-const updateStudentInDB = async (id: string, payload: Partial<typeof Student>) => {
-  const result = await Student.findOneAndUpdate({ id }, payload, {
+const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
+
+  const { name, guardian, localGuardian, ...remainStudent } = payload
+
+  const modifiedObjectData: Record<string, unknown> = { ...remainStudent }
+
+  if (name && Object.keys(name).length) {
+    for (const [keys, value] of Object.entries(name)) {
+      modifiedObjectData[`name${keys}`] = value
+    }
+  }
+  if (guardian && Object.keys(guardian).length) {
+    for (const [keys, value] of Object.entries(guardian)) {
+      modifiedObjectData[`guardian${keys}`] = value
+    }
+  }
+  if (localGuardian && Object.keys(localGuardian).length) {
+    for (const [keys, value] of Object.entries(localGuardian)) {
+      modifiedObjectData[`localGuardian${keys}`] = value
+    }
+  }
+
+
+  const result = await Student.findOneAndUpdate({ id }, modifiedObjectData, {
     new: true,
     runValidators: true,
   })

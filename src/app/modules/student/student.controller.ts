@@ -34,9 +34,9 @@ const getSingleStudent = catchAsync(async (req, res) => {
 
 const updateStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
-  const payload = req.body;
+  const { student } = req.body
 
-  const result = await StudentServices.updateStudentInDB(studentId, payload);
+  const result = await StudentServices.updateStudentInDB(studentId, student);
 
   if (!result) {
     return res.status(httpStatus.NOT_FOUND).json({
