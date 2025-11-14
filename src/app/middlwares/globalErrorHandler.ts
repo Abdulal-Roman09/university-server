@@ -4,6 +4,7 @@ import handleZodError from "../errors/handleZodError";
 import handleValidationError from "../errors/handleValidationError";
 import config from "../config";
 import { ZodError } from "zod";
+import handleCastError from "../errors/handleCastError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;
@@ -25,11 +26,11 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources
-
-
-
-
-
+  } else if (err?.name === 'CastError') {
+    const simplifiedError = handleCastError(err)
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources
   }
 
   return res.status(statusCode).json({
