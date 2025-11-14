@@ -60,12 +60,12 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
     return newStudent[0];
 
-  } catch (err) {
+  } catch (err: any) {
 
     // Abort transaction if any error occurs
     await session.abortTransaction();
     await session.endSession()
-    throw new Error("filded to create student")
+    throw new Error(err)
   }
 };
 
