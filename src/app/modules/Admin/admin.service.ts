@@ -74,7 +74,7 @@ const deleteAdminFromDB = async (id: string) => {
     }
 }
 
-export const adminServices = {
+export const AdminServices = {
     getAllAdminIntoDB,
     getSingleAdminFromDB,
     updateAdminInDB,
