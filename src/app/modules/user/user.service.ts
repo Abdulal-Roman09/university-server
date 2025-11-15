@@ -6,8 +6,10 @@ import { TStudent } from "../student/student.interface";
 import { Student } from "../student/student.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
-import { generateStudentId } from "./user.utils";
+import { generatedAdminid, generateStudentId } from "./user.utils";
 import httpStatus from "http-status";
+import { TAdmin } from "../Admin/admin.interface";
+import { Admin } from "../Admin/admin.model";
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // Create a user object
@@ -69,6 +71,43 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   }
 };
 
+const createAdminIntoDB = async (password: string, payload: TAdmin) => {
+
+  // create a user ojbect
+  const userData: Partial<TUser> = {}
+  userData.password = password || (config.default_password as string)
+
+  userData.role = 'admin'
+
+  const session = await mongoose.startSession()
+
+  try {
+
+    userData.id = await generatedAdminid()
+
+    const newUser = await User.create([userData], { session })
+    if (!newUser) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create admin');
+    }
+    payload.id = newUser[0].id
+    payload.user = newUser[0]._id
+
+    const newAdmin = await Admin.create([payload], { session })
+    if (!newAdmin.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create admin');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+  } catch (err: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(err);
+  }
+}
+
+
 export const UserServices = {
   createStudentIntoDB,
+  createAdminIntoDB
 };
