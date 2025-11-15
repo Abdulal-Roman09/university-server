@@ -22,7 +22,7 @@ export const course = new Schema<TCourse>({
     prefix: { type: String },
     code: { type: Number },
     credit: { type: Number },
-    isDeleted: { type: Boolean },
+    isDeleted: { type: Boolean, default: false },
     preRequisiteCourses: preRequisiteCoursesSchema,
 
 
