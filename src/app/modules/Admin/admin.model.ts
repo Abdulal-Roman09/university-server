@@ -1,5 +1,5 @@
-import { Schema } from "mongoose";
-import { TAdmin, TUserName } from "./admin.interface";
+import { model, Schema } from "mongoose";
+import { AdminModel, TAdmin, TUserName } from "./admin.interface";
 import { Gender } from "./admin.constants";
 
 const userNameSchema = new Schema<TUserName>({
@@ -27,7 +27,33 @@ const adminSchema = new Schema<TAdmin>({
     toObject: { virtuals: true },
 });
 
-// virtual for full name
+
+//----------------- virtual for full name-----------------
 adminSchema.virtual('fullName').get(function () {
-    return `${this.name.firstName} ${this.name.middleName || ''} ${this.name.lastName}`.trim();
+    return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`
 });
+
+//------------------checking is user exist ------------------
+adminSchema.statics.isUserExists = async function (id: string) {
+    const existingUser = await Admin.findById(id)
+    return existingUser
+}
+
+//-------------filter out deleted docoments-------------------
+adminSchema.pre('find', function (next) {
+    this.find({ isDeleted: { $ne: true } })
+    next()
+})
+
+adminSchema.pre('findOne', function (next) {
+    this.find({ isDeleted: { $ne: true } })
+    next()
+})
+
+//--------------filter agrigate deleted docoments-----------
+adminSchema.pre('aggregate', function (next) {
+    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
+    next()
+})
+
+export const Admin = model<TAdmin, AdminModel>('Admin', adminSchema);    

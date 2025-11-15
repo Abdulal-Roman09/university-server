@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Model, Types } from "mongoose";
 
 export type TGender = 'male' | 'female' | 'other';
 
@@ -34,3 +34,7 @@ export type TAdmin = {
     profileImage?: string;
     isDeleted: boolean;
 };
+
+export interface AdminModel extends Model<TAdmin> {
+    isUserExists(id: string): Promise<TAdmin> | null
+}
