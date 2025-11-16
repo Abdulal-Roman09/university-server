@@ -18,12 +18,12 @@ export const preRequisiteCoursesSchema = new Schema<TPreRequisiteCourse>(
     },
 );
 export const courseSchema = new Schema<TCourse>({
-    title: { type: String },
+    title: { type: String, unique: true },
     prefix: { type: String },
-    code: { type: Number },
+    code: { type: Number, unique: true },
     credit: { type: Number },
     isDeleted: { type: Boolean, default: false },
-    preRequisiteCourses: preRequisiteCoursesSchema,
+    preRequisiteCourses: [preRequisiteCoursesSchema],
 })
 export const Course = model<TCourse>('Course', courseSchema);
 

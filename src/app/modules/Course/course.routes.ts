@@ -13,5 +13,6 @@ router.post(
 
 router.get("/", CourseController.getAllCourse);
 router.get("/:id", CourseController.getSingleCourse);
+router.delete("/:id", CourseController.deleteCourse);
 
 export const CourseRouters = router;
