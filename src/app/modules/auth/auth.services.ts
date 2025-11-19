@@ -1,37 +1,39 @@
-
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
 import httpStatus from 'http-status';
-import bcrypt from 'bcryptjs';
 import AppError from "../../errors/AppError.";
 
-
-
 const loginUser = async (payload: TLoginUser) => {
-    // Check if user exists
-    const user = await User.findOne({ id: payload.id });
-    if (!user) {
-        // 404 Not Found – user not found
-        throw new AppError(httpStatus.NOT_FOUND, 'This user is not found');
-    }
 
-    // Check if user is deleted
-    if (user.isDeleted) {
-        // 410 Gone – resource deleted
-        throw new AppError(httpStatus.GONE, 'This user is deleted');
-    }
+  const user = await User.isUserExistsByCustomId(payload.id);
+  console.log("user password :", user?.password)
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "This user is not found");
+  }
 
-    // Check if user is blocked
-    if (user.status === 'blocked') {
-        // 403 Forbidden – user blocked
-        throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked');
-    }
+  if (user.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, "User is deleted");
+  }
 
-    // Chack the password is correncted
-    const isPasswordMatched =await bcrypt.compare(payload?.password, user?.password)
+  // check is active
+  const isActive = await User.isStatusActive(payload.id);
+  if (!isActive) {
+    throw new AppError(httpStatus.FORBIDDEN, "User is blocked");
+  }
 
+  // check password match
+  const isMatched = await User.isPasswordMatched(
+    payload.password,
+    user.password
+  );
+  console.log(payload.password, user.password);
+  if (!isMatched) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Password is incorrect");
+  }
+
+  return user;
 };
 
 export const AuthServices = {
-    loginUser
+  loginUser,
 };
