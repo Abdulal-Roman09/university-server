@@ -1,4 +1,5 @@
 import { Model } from "mongoose";
+import { USER_ROLE } from "./user.constance";
 
 export interface TUser {
   id: string;
@@ -15,4 +16,6 @@ export interface UserModel extends Model<TUser> {
   isUserDeleted(id: string): Promise<boolean>;
   isPasswordMatched(plainTextPassword: string, hashedPassword: string): Promise<boolean>;
 }
+
+export type TUserRole = keyof typeof USER_ROLE
 
