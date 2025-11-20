@@ -6,14 +6,13 @@ import { createAdminValidationSchema } from '../Admin/admin.validation';
 import auth from '../../middlwares/auth';
 import { USER_ROLE } from './user.constance';
 
-
 const router = express.Router();
 
 router.post(
     '/create-student', auth(USER_ROLE.admin),
     validationRequest(studentValidations.createStudentValidationSchema),
-    UserControllers.createStudent
-);
+    UserControllers.createStudent);
+
 
 router.post('/create-amdin', validationRequest(createAdminValidationSchema), UserControllers.createAdmin)
 

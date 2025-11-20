@@ -11,11 +11,13 @@ const userSchema = new Schema<TUser, UserModel>({
     password: {
         type: String,
         required: true,
-         select: false,
+        select: false,
     },
     needPasswordChange: {
         type: Boolean,
         default: true,
+    }, passwordChangedAt: {
+        type: Date,
     },
     role: {
         type: String,
