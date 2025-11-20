@@ -9,7 +9,7 @@ const router = express.Router()
 
 router.post('/login', validationRequest(AuthValidation.loginValidationSchema),AuthController.loginUser)
 
-router.post('/change-password',auth(USER_ROLE.admin,USER_ROLE.feculty,USER_ROLE.student), validationRequest(AuthValidation.changePasswordValidationSchema),AuthController.loginUser)
+router.post('/change-password',auth(USER_ROLE.admin,USER_ROLE.feculty,USER_ROLE.student), validationRequest(AuthValidation.changePasswordValidationSchema),AuthController.changePassword)
 
 
 export const AuthRouters = router
