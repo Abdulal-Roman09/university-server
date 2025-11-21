@@ -7,9 +7,9 @@ import { USER_ROLE } from '../user/user.constance';
 
 const router = express.Router()
 
-router.post('/login', validationRequest(AuthValidation.loginValidationSchema),AuthController.loginUser)
+router.post('/login', validationRequest(AuthValidation.loginValidationSchema), AuthController.loginUser)
 
-router.post('/change-password',auth(USER_ROLE.admin,USER_ROLE.feculty,USER_ROLE.student), validationRequest(AuthValidation.changePasswordValidationSchema),AuthController.changePassword)
+router.post('/change-password', auth(USER_ROLE.admin, USER_ROLE.feculty, USER_ROLE.student), validationRequest(AuthValidation.changePasswordValidationSchema), AuthController.changePassword)
 
-
+router.post('/refresh-token', validationRequest(AuthValidation.refreshTokenValidationSchema), AuthController.refreshToken)
 export const AuthRouters = router

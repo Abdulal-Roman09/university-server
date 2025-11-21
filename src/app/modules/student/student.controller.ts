@@ -5,6 +5,7 @@ import httpStatus from 'http-status';
 
 const getAllStudents = catchAsync(async (req, res) => {
   const result = await StudentServices.getAllStudentsFromDB(req.query);
+  console.log(req.cookies)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
