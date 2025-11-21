@@ -8,7 +8,7 @@ import { TUserRole } from '../modules/user/user.interface';
 import { User } from '../modules/user/user.model';
 
 const auth = (...requiredRoles: TUserRole[]) => {
-    
+
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
         const token = req.headers.authorization;
@@ -20,33 +20,30 @@ const auth = (...requiredRoles: TUserRole[]) => {
             config.jwt_access_secret as string
         ) as JwtPayload;
 
-        const { role, userId } = decoded;
-
-        // ---------------------------
-        // 1️⃣ Check user exists
-        // ---------------------------
+        const { role, userId, iat } = decoded;
         const user = await User.isUserExistsByCustomId(userId);
         if (!user) {
             throw new AppError(httpStatus.NOT_FOUND, "User not found");
         }
 
-        // ---------------------------
-        // 2️⃣ Check soft deleted
-        // ---------------------------
         if (user.isDeleted) {
             throw new AppError(httpStatus.FORBIDDEN, "User is deleted");
         }
 
-        // ---------------------------
-        // 3️⃣ Check blocked
-        // ---------------------------
         if (user.status === "blocked") {
             throw new AppError(httpStatus.FORBIDDEN, "User is blocked");
         }
 
-        // ---------------------------
-        // 4️⃣ Role based access control
-        // ---------------------------
+        if (
+            user.passwordChangedAt &&
+            await User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat as number)
+        ) {
+            throw new AppError(
+                httpStatus.UNAUTHORIZED,
+                "Your password was changed recently. Please login again."
+            );
+        }
+
         if (requiredRoles.length && !requiredRoles.includes(role)) {
             throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
         }

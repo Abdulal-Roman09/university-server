@@ -63,11 +63,26 @@ userSchema.post('save', function (doc, next) {
     next()
 })
 
-userSchema.statics.isPasswordMatched = async function (
-    plainTextPassword: string,
-    hashedPassword: string
-): Promise<boolean> {
+userSchema.statics.isPasswordMatched = async function (plainTextPassword: string, hashedPassword: string) {
     return await bcrypt.compare(plainTextPassword, hashedPassword);
+};
+
+userSchema.statics.isJWTIssuedBeforePasswordChanged = async function (
+  passwordChangedTimestamp: Date | null,
+  jwtIssuedTimestamp: number
+): Promise<boolean> {
+
+  // User never changed password → token still valid
+  if (!passwordChangedTimestamp) {
+    return false;
+  }
+
+  // Convert to seconds
+  const passwordChangedTimeInSeconds = Math.floor(
+    new Date(passwordChangedTimestamp).getTime() / 1000
+  );
+
+  return passwordChangedTimeInSeconds > jwtIssuedTimestamp;
 };
 
 
