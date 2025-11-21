@@ -12,14 +12,12 @@ import { TAdmin } from "../Admin/admin.interface";
 import { Admin } from "../Admin/admin.model";
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
+
   // Create a user object
   const userData: Partial<TUser> = {};
-
-  // If password is not provided, use default password
   userData.password = password || (config.default_password as string);
-
-  // Set user role
   userData.role = "student";
+  userData.email = payload.email
 
   // Find academic semester info
 
@@ -72,6 +70,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 };
 
 const createAdminIntoDB = async (password: string, payload: TAdmin) => {
+
   const session = await mongoose.startSession();
 
   try {
@@ -81,6 +80,7 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     const userData: Partial<TUser> = {};
     userData.password = password || (config.default_password as string);
     userData.role = 'admin';
+    userData.email = payload.email;
     userData.id = await generatedAdminid();
 
     const newUser = await User.create([userData], { session });
@@ -106,8 +106,6 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     throw err;
   }
 };
-
-
 
 export const UserServices = {
   createStudentIntoDB,

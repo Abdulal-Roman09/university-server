@@ -8,12 +8,13 @@ import { USER_ROLE } from './user.constance';
 
 const router = express.Router();
 
-router.post(
-    '/create-student', auth(USER_ROLE.admin),
+router.post('/create-student', auth(USER_ROLE.admin),
     validationRequest(studentValidations.createStudentValidationSchema),
     UserControllers.createStudent);
 
 
 router.post('/create-amdin', validationRequest(createAdminValidationSchema), UserControllers.createAdmin)
+
+
 
 export const UserRoutes = router;

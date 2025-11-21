@@ -7,6 +7,11 @@ const userSchema = new Schema<TUser, UserModel>({
     id: {
         type: String,
         required: true,
+        unique: true
+    }, email: {
+        type: String,
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -68,21 +73,21 @@ userSchema.statics.isPasswordMatched = async function (plainTextPassword: string
 };
 
 userSchema.statics.isJWTIssuedBeforePasswordChanged = async function (
-  passwordChangedTimestamp: Date | null,
-  jwtIssuedTimestamp: number
+    passwordChangedTimestamp: Date | null,
+    jwtIssuedTimestamp: number
 ): Promise<boolean> {
 
-  // User never changed password → token still valid
-  if (!passwordChangedTimestamp) {
-    return false;
-  }
+    // User never changed password → token still valid
+    if (!passwordChangedTimestamp) {
+        return false;
+    }
 
-  // Convert to seconds
-  const passwordChangedTimeInSeconds = Math.floor(
-    new Date(passwordChangedTimestamp).getTime() / 1000
-  );
+    // Convert to seconds
+    const passwordChangedTimeInSeconds = Math.floor(
+        new Date(passwordChangedTimestamp).getTime() / 1000
+    );
 
-  return passwordChangedTimeInSeconds > jwtIssuedTimestamp;
+    return passwordChangedTimeInSeconds > jwtIssuedTimestamp;
 };
 
 

@@ -47,7 +47,6 @@ const auth = (...requiredRoles: TUserRole[]) => {
         if (requiredRoles.length && !requiredRoles.includes(role)) {
             throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
         }
-
         // Attach decoded
         req.user = decoded;
 
