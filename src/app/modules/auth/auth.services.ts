@@ -50,61 +50,6 @@ const loginUser = async (payload: TLoginUser) => {
   };
 };
 
-// const changePassword = async (
-//   userData: JwtPayload,
-//   payload: { oldPassword: string; newPassword: string },
-// ) => {
-
-//   // 1. check if user exists
-//   const user = await User.isUserExistsByCustomId(userData.userId);
-//   // user kno khoje paiteche na
-
-//   console.log(userData)
-
-//   if (!user) {
-//     throw new AppError(httpStatus.NOT_FOUND, "This user is not found!");
-//   }
-
-//   // 2. deleted check
-//   if (user.isDeleted) {
-//     throw new AppError(httpStatus.FORBIDDEN, "This user is deleted!");
-//   }
-
-//   // 3. blocked check
-//   if (user.status === "blocked") {
-//     throw new AppError(httpStatus.FORBIDDEN, "This user is blocked!");
-//   }
-
-//   // 4. compare old password
-//   const isMatched = await User.isPasswordMatched(
-//     payload.oldPassword,
-//     user.password
-//   );
-
-//   if (!isMatched) {
-//     throw new AppError(httpStatus.FORBIDDEN, "Old password is incorrect!");
-//   }
-
-//   // 5. hash new password
-//   const newHashedPassword = await bcrypt.hash(
-//     payload.newPassword,
-//     Number(config.bcrypt_salt_rounds)
-//   );
-
-//   // 6. update password
-//   await User.findOneAndUpdate(
-//     { id: userData.userId },
-//     {
-//       password: newHashedPassword,
-//       needPasswordChange: false,
-//       passWordChangetAt: new Date(),
-//     }
-//   );
-
-//   return {
-//     message: "Password changed successfully!",
-//   };
-// };
 const changePassword = async (
   userData: JwtPayload,
   payload: { oldPassword: string; newPassword: string },

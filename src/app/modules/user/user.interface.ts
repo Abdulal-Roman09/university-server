@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import { Date, Model } from "mongoose";
 import { USER_ROLE } from "./user.constance";
 
 export interface TUser {
@@ -16,6 +16,7 @@ export interface UserModel extends Model<TUser> {
   isStatusActive(id: string): Promise<boolean>;
   isUserDeleted(id: string): Promise<boolean>;
   isPasswordMatched(plainTextPassword: string, hashedPassword: string): Promise<boolean>;
+  isJWTIssuedBeforePasswordChanged(passwordChangeedTimestamp: Date, jwtIssuedTimestamp: number): boolean
 }
 
 export type TUserRole = keyof typeof USER_ROLE
