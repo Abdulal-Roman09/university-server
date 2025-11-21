@@ -12,7 +12,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
         const token = req.headers.authorization;
-        if (!token) {
+        if (!token) { 
             throw new AppError(httpStatus.UNAUTHORIZED, "Token is not provided");
         }
         const decoded = jwt.verify(
