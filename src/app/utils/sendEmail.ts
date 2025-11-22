@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import config from "../config";
 
-export const sendEmail = async () => {
+export const sendEmail = async (to: string, html: string) => {
     try {
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -14,11 +14,11 @@ export const sendEmail = async () => {
         });
 
         const info = await transporter.sendMail({
-            from: "mdroman45678910@gmail.com",
-            to: "abdulal.roman09@gmail.com",
-            subject: "Hello ✔",
-            text: "Hello world?",
-            html: "<b>Hello world?</b>",
+            from: "abdulalnomanforcse@gmail.com",
+            to,
+            subject: "Your Parcel Submission is Successful",
+            text: "Your parcel has been successfully submitted. Thank you for using our service!",
+            html,
         });
 
         console.log("Message sent:", info.messageId);
