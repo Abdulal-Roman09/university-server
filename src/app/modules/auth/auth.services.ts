@@ -9,9 +9,7 @@ import { createToken } from "./auth.utils";
 import { sendEmail } from "../../utils/sendEmail";
 
 
-// ======================================================
-//                 LOGIN USER (Single DB Call)
-// ======================================================
+//                 LOGIN USER 
 const loginUser = async (payload: TLoginUser) => {
   const user = await User.findOne({ id: payload.id }).select("+password");
 
@@ -31,10 +29,7 @@ const loginUser = async (payload: TLoginUser) => {
   };
 };
 
-
-// ======================================================
-//              CHANGE PASSWORD (Single DB Call)
-// ======================================================
+//              CHANGE PASSWORD 
 const changePassword = async (
   userData: JwtPayload,
   payload: { oldPassword: string; newPassword: string }
@@ -58,10 +53,8 @@ const changePassword = async (
   return null;
 };
 
+//              REFRESH TOKEN 
 
-// ======================================================
-//              REFRESH TOKEN (Single DB Call)
-// ======================================================
 const refreshToken = async (token: string) => {
   let decoded: JwtPayload;
 
@@ -87,10 +80,7 @@ const refreshToken = async (token: string) => {
   };
 };
 
-
-// ======================================================
-//            FORGET PASSWORD (Single DB Call)
-// ======================================================
+//            FORGET PASSWORD 
 const forgetPassword = async (userId: string) => {
   const user = await User.findOne({ id: userId });
   if (!user) throw new AppError(httpStatus.NOT_FOUND, "This user is not found");
@@ -108,11 +98,7 @@ const forgetPassword = async (userId: string) => {
   await sendEmail(user.email, resetUILink);
 };
 
-
-
-// ======================================================
-//             RESET PASSWORD (Single DB Call)
-// ======================================================
+// reset password
 const resetPassword = async (
   payload: { id: string; newPassword: string },
   token: string
@@ -127,7 +113,7 @@ const resetPassword = async (
   if (decoded.userId !== payload.id) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid reset request");
   }
-
+  console.log(payload.newPassword)
   const newHashedPassword = await bcrypt.hash(payload.newPassword, Number(config.bcrypt_salt_rounds));
 
   user.password = newHashedPassword;
