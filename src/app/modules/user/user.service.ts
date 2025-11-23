@@ -11,6 +11,7 @@ import httpStatus from "http-status";
 import { TAdmin } from "../Admin/admin.interface";
 import { Admin } from "../Admin/admin.model";
 import { verifyToken } from "../auth/auth.utils";
+import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
@@ -43,6 +44,8 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     if (!newUser.length) {
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to create user");
     }
+    // send image to cloudenary
+    await sendImageToCloudinary()
 
     // Attach user id and reference to student payload
     payload.id = newUser[0].id;
@@ -131,7 +134,7 @@ const changeStatus = async (id: string, payload: { status: string }) => {
   const result = await User.findByIdAndUpdate(id, payload, {
     new: true,
   });
-  
+
   return result;
 };
 

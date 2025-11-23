@@ -22,12 +22,20 @@ export const findLastAdminId = async () => {
 
 // find  lest students
 export const findLastStudent = async () => {
-    const lastStudent = await User.findOne({ role: 'student' }, { id: 1, _id: 0 }).lean()
-    return lastStudent?.id ? lastStudent.id : undefined
+    const lastStudent = await User.findOne(
+        { role: 'student' },
+        { id: 1, _id: 0 }
+    )
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return lastStudent?.id ? lastStudent.id : undefined;
 }
+
 
 // genarate student id
 export const generateStudentId = async (payload: TAcademicSemester) => {
+
     // first student genarted id
     let currentId = (0).toString()
     const lastStudentId = await findLastStudent()
