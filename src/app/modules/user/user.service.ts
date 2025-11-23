@@ -13,7 +13,7 @@ import { Admin } from "../Admin/admin.model";
 import { verifyToken } from "../auth/auth.utils";
 import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
-const createStudentIntoDB = async (password: string, payload: TStudent) => {
+const createStudentIntoDB = async (file: any, password: string, payload: TStudent) => {
 
   // Create a user object
   const userData: Partial<TUser> = {};
@@ -45,11 +45,14 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to create user");
     }
     // send image to cloudenary
-    await sendImageToCloudinary()
+    const imageName = `${userData.id}${payload?.name?.firstName}${payload?.name?.middleName}${payload?.name?.lastName}`
+    const path = file.path
+    const { secure_url } = await sendImageToCloudinary(imageName, path);
 
     // Attach user id and reference to student payload
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
+    payload.profileImg = secure_url;
 
     // Create Student (Transaction step 2)
     const newStudent = await Student.create([payload], { session });
