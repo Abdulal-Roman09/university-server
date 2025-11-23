@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { get } from "mongoose";
 import config from "../../config";
 import AppError from "../../errors/AppError.";
 import { AcademicSemester } from "../academicSemester/academicSemester.model";
@@ -10,6 +10,7 @@ import { generatedAdminid, generateStudentId } from "./user.utils";
 import httpStatus from "http-status";
 import { TAdmin } from "../Admin/admin.interface";
 import { Admin } from "../Admin/admin.model";
+import { verifyToken } from "../auth/auth.utils";
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
@@ -107,7 +108,30 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
   }
 };
 
+const getMe = async (token: string) => {
+  const decoded = verifyToken(token, config.jwt_access_secret as string)
+
+  const { userId, role } = decoded
+
+  let result = null
+
+  if (role === 'student') {
+    result = await Student.findOne({ id: userId }).populate('user')
+  }
+
+  if (role === 'admin') {
+    result = await Admin.findOne({ id: userId }).populate('user')
+  }
+
+  // if (role === 'feculty') {
+  //   result = await Feculty.findOne({ id: userId }).populate('user')
+  // }
+
+  return result
+}
+
 export const UserServices = {
   createStudentIntoDB,
-  createAdminIntoDB
+  createAdminIntoDB,
+  getMe
 };

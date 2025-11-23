@@ -5,7 +5,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import AppError from "../../errors/AppError.";
 import bcrypt from "bcryptjs";
-import { createToken } from "./auth.utils";
+import { createToken, verifyToken } from "./auth.utils";
 import { sendEmail } from "../../utils/sendEmail";
 
 
@@ -59,7 +59,7 @@ const refreshToken = async (token: string) => {
   let decoded: JwtPayload;
 
   try {
-    decoded = jwt.verify(token, config.jwt_refresh_secret!) as JwtPayload;
+    decoded = verifyToken(token, config.jwt_refresh_secret as string)
   } catch {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid refresh token");
   }
@@ -108,7 +108,7 @@ const resetPassword = async (
   if (user.isDeleted) throw new AppError(httpStatus.FORBIDDEN, "User is deleted");
   if (user.status === "blocked") throw new AppError(httpStatus.FORBIDDEN, "User is blocked");
 
-  const decoded = jwt.verify(token, config.jwt_access_secret!) as JwtPayload;
+  const decoded = verifyToken(token, config.jwt_access_secret as string)
 
   if (decoded.userId !== payload.id) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid reset request");
