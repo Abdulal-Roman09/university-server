@@ -40,10 +40,11 @@ const createAdmin = catchAsync(async (req, res) => {
         data: result,
     });
 });
+
 const getMe = catchAsync(async (req, res) => {
 
     const { userId, role } = req.user
-    
+
     const result = await UserServices.getMe(userId, role)
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
@@ -53,8 +54,22 @@ const getMe = catchAsync(async (req, res) => {
     });
 });
 
+const changeStatus = catchAsync(async (req, res) => {
+
+    const { id } = req.params
+
+    const result = await UserServices.changeStatus(id, req.body)
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: 'update status successfully',
+        data: result,
+    });
+});
+
 export const UserControllers = {
     createStudent,
     createAdmin,
-    getMe
+    getMe,
+    changeStatus
 };
